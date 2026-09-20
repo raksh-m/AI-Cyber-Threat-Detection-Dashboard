@@ -27,3 +27,5 @@ dist-ssr
 .env.*
 
 target/
+
+ml/data/
