@@ -1,0 +1,42 @@
+.stat-card{
+    background:#102133;
+    border-radius:12px;
+    padding:20px;
+    color:white;
+    flex:1;
+    min-width:220px;
+    border:1px solid #1b3b5f;
+    transition:0.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-5px);
+}
+
+.card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.card-top span{
+    color:#b7c7d8;
+    font-size:15px;
+}
+
+.dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+}
+
+.stat-card h2{
+    margin-top:18px;
+    font-size:38px;
+}
+
+.stat-card p{
+    margin-top:15px;
+    color:#7f97af;
+    font-size:13px;
+}

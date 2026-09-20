@@ -1,0 +1,11 @@
+.activity-chart{
+    background:#102133;
+    color:white;
+    padding:20px;
+    border-radius:12px;
+    border:1px solid #1f3550;
+}
+
+.activity-chart h2{
+    margin-bottom:20px;
+}

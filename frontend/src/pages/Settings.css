@@ -1,0 +1,143 @@
+.settings-page {
+  padding: 25px;
+  color: white;
+  min-height: calc(100vh - 80px);
+}
+
+.settings-header {
+  margin-bottom: 25px;
+}
+
+.settings-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.settings-header p {
+  margin-top: 8px;
+  color: #9fb4ca;
+}
+
+.settings-container {
+  max-width: 900px;
+}
+
+.settings-section {
+  background: #102133;
+  border: 1px solid #1f3550;
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.settings-title {
+  margin-bottom: 18px;
+}
+
+.settings-title h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.settings-title p {
+  margin-top: 6px;
+  color: #71869b;
+  font-size: 13px;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 0;
+  border-top: 1px solid #1f3550;
+}
+
+.setting-row h3 {
+  margin: 0 0 5px;
+  font-size: 15px;
+}
+
+.setting-row p {
+  margin: 0;
+  color: #71869b;
+  font-size: 13px;
+}
+
+/* Toggle */
+
+.switch {
+  position: relative;
+  width: 48px;
+  height: 25px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background: #34495e;
+  border-radius: 30px;
+  transition: 0.25s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 19px;
+  height: 19px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.25s;
+}
+
+.switch input:checked + .slider {
+  background: #00d4ff;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(23px);
+}
+
+/* Information rows */
+
+.setting-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 5px;
+  border-top: 1px solid #1f3550;
+}
+
+.setting-info span {
+  color: #9fb4ca;
+}
+
+.setting-info strong {
+  color: #d8e5f0;
+  font-size: 14px;
+}
+
+/* Save */
+
+.save-settings {
+  border: none;
+  background: #00d4ff;
+  color: #071321;
+  padding: 12px 25px;
+  border-radius: 7px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.save-settings:hover {
+  opacity: 0.9;
+}

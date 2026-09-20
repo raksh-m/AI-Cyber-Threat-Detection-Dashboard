@@ -1,0 +1,414 @@
+/* =====================================================
+   REPORTS PAGE
+   ===================================================== */
+
+.reports-page {
+  padding: 25px;
+  color: white;
+  min-height: calc(100vh - 80px);
+  background: #071321;
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.reports-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #ffffff;
+}
+
+.reports-header p {
+  margin-top: 8px;
+  color: #9fb4ca;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   GENERATE REPORT BUTTON
+   ===================================================== */
+
+.generate-report-button {
+  background: #00d4ff;
+  color: #071321;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+  white-space: nowrap;
+}
+
+.generate-report-button:hover {
+  background: #20dcff;
+  transform: translateY(-1px);
+}
+
+.generate-report-button:active {
+  transform: translateY(0);
+}
+
+
+/* =====================================================
+   SUMMARY CARDS
+   ===================================================== */
+
+.reports-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.report-card {
+  background: #102133;
+  border: 1px solid #1f3550;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.report-card span {
+  display: block;
+  color: #9fb4ca;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.report-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: 26px;
+}
+
+
+/* =====================================================
+   REPORT SECTIONS
+   ===================================================== */
+
+.reports-section {
+  background: #102133;
+  border: 1px solid #1f3550;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-sizing: border-box;
+}
+
+.reports-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reports-section-header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.reports-section-header p {
+  color: #9fb4ca;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   REPORT TABLE
+   ===================================================== */
+
+.report-table {
+  margin-top: 20px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+
+/* TABLE HEADER */
+
+.report-table-header {
+  display: grid;
+
+  grid-template-columns:
+    2fr 1fr 1fr 1fr;
+
+  align-items: center;
+
+  padding: 14px;
+
+  background: #16283c;
+
+  color: #9fb4ca;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  border-radius: 7px 7px 0 0;
+
+  box-sizing: border-box;
+}
+
+
+/* TABLE ROW */
+
+.report-table-row {
+  display: grid;
+
+  grid-template-columns:
+    2fr 1fr 1fr 1fr;
+
+  align-items: center;
+
+  padding: 14px;
+
+  border-bottom: 1px solid #1f3550;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  box-sizing: border-box;
+}
+
+.report-table-row:last-child {
+  border-bottom: none;
+}
+
+
+/* =====================================================
+   THREAT NAME
+   ===================================================== */
+
+.report-threat-name {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+
+/* =====================================================
+   SEVERITY BADGES
+   ===================================================== */
+
+.severity-badge {
+  display: inline-block;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+
+  font-weight: bold;
+
+  color: #ffffff;
+
+  white-space: nowrap;
+}
+
+
+/* CRITICAL */
+
+.severity-badge.critical {
+  background: #ff3b30;
+}
+
+
+/* HIGH */
+
+.severity-badge.high {
+  background: #ff9500;
+}
+
+
+/* MEDIUM */
+
+.severity-badge.medium {
+  background: #34c759;
+}
+
+
+/* LOW */
+
+.severity-badge.low {
+  background: #0a84ff;
+}
+
+
+/* =====================================================
+   REPORT INFORMATION
+   ===================================================== */
+
+.report-information {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-top: 5px;
+
+  background: #16283c;
+
+  border: 1px solid #1f3550;
+
+  border-radius: 8px;
+
+  padding: 15px;
+
+  box-sizing: border-box;
+}
+
+
+/* INFORMATION ICON */
+
+.report-information-icon {
+  width: 28px;
+
+  height: 28px;
+
+  min-width: 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #00d4ff;
+
+  color: #071321;
+
+  font-weight: bold;
+
+  font-size: 14px;
+}
+
+
+/* INFORMATION TEXT */
+
+.report-information strong {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  margin-bottom: 5px;
+}
+
+.report-information p {
+  margin: 0;
+
+  color: #b8c9da;
+
+  line-height: 1.6;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   TABLE HOVER
+   ===================================================== */
+
+.report-table-row:hover {
+  background: #132a40;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1100px) {
+
+  .reports-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 900px) {
+
+  .reports-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .generate-report-button {
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .report-table-header,
+  .report-table-row {
+
+    grid-template-columns:
+      1.5fr
+      1fr
+      1fr
+      1fr;
+
+    font-size: 12px;
+
+    padding: 11px;
+  }
+
+  .reports-page {
+    padding: 15px;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .reports-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .report-table-header,
+  .report-table-row {
+
+    grid-template-columns:
+      1.5fr
+      1fr
+      1fr;
+  }
+
+  .report-table-header span:last-child,
+  .report-table-row span:last-child {
+    display: none;
+  }
+
+  .reports-header h1 {
+    font-size: 24px;
+  }
+
+}

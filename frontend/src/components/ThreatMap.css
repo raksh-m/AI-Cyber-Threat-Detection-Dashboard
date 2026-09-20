@@ -1,0 +1,154 @@
+.threat-map {
+  background: #102133;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #1f3550;
+}
+
+.threat-map h2 {
+  margin: 0 0 18px 0;
+  font-size: 22px;
+}
+
+/* =========================
+   MAP + DISTRIBUTION LAYOUT
+   ========================= */
+
+.map-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* =========================
+   WORLD MAP
+   ========================= */
+
+.map-box {
+  background: #0d1c2d;
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-box img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  opacity: 0.75;
+}
+
+/* =========================
+   ATTACK LIST
+   ========================= */
+
+.attack-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attack-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #16283c;
+  border-radius: 8px;
+  min-height: 42px;
+}
+
+.attack-item h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.attack-item p {
+  margin: 3px 0 0 0;
+  color: #9fb4ca;
+  font-size: 12px;
+}
+
+.attack-info {
+  flex: 1;
+}
+
+.attack-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.attack-header span {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* =========================
+   PROGRESS BAR
+   ========================= */
+
+.attack-bar {
+  width: 100%;
+  height: 5px;
+  background: #20364d;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.attack-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  min-width: 2px;
+}
+
+/* =========================
+   INFORMATION BOX
+   ========================= */
+
+.map-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px;
+
+  background: #16283c;
+  border-radius: 8px;
+
+  color: #9fb4ca;
+  font-size: 12px;
+}
+
+.map-info strong {
+  display: block;
+  color: white;
+  margin-bottom: 3px;
+}
+
+.map-info p {
+  margin: 0;
+  color: #9fb4ca;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 900px) {
+
+  .map-content {
+    grid-template-columns: 1fr;
+  }
+
+  .map-box img {
+    height: 220px;
+  }
+
+}
