@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -7,23 +8,131 @@ import "./Reports.css";
 function Reports({ analysis }) {
 
   // =====================================================
+  // MONGODB ANALYSIS HISTORY
+  // =====================================================
+
+  const [history, setHistory] = useState([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
+  const [selectedAnalysis, setSelectedAnalysis] = useState(null);
+
+
+  // =====================================================
+  // FETCH ANALYSIS HISTORY
+  // =====================================================
+
+  const fetchHistory = async () => {
+
+    try {
+
+      setLoadingHistory(true);
+
+      const response = await fetch(
+        "http://localhost:8080/api/analysis/history"
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Failed to fetch analysis history"
+        );
+      }
+
+      const data = await response.json();
+
+      setHistory(data);
+
+    } catch (error) {
+
+      console.error(
+        "Analysis history error:",
+        error
+      );
+
+    } finally {
+
+      setLoadingHistory(false);
+
+    }
+
+  };
+
+
+  useEffect(() => {
+
+    fetchHistory();
+
+  }, []);
+
+
+  // =====================================================
+  // SELECTED ANALYSIS
+  //
+  // If user clicks View from MongoDB history,
+  // that analysis becomes the report source.
+  //
+  // Otherwise the current dashboard analysis is used.
+  // =====================================================
+
+  const reportSource =
+    selectedAnalysis || {
+
+      totalTraffic:
+        analysis?.totalTraffic || 0,
+
+      benignTraffic:
+        analysis?.benign || 0,
+
+      totalThreats:
+        analysis?.threats || 0,
+
+      criticalAlerts:
+        analysis?.criticalAlerts || 0,
+
+      threatTypes:
+        analysis?.threatTypes || {},
+
+      datasetName:
+        "Current Analysis",
+
+      uploadedAt:
+        null,
+
+      invalidRows:
+        0,
+
+    };
+
+
+  // =====================================================
   // ACTUAL ANALYSIS DATA
   // =====================================================
 
   const totalTraffic =
-    Number(analysis?.totalTraffic || 0);
+    Number(
+      reportSource.totalTraffic || 0
+    );
 
   const benignTraffic =
-    Number(analysis?.benign || 0);
+    Number(
+      reportSource.benignTraffic || 0
+    );
 
   const totalThreats =
-    Number(analysis?.threats || 0);
+    Number(
+      reportSource.totalThreats || 0
+    );
 
   const criticalAlerts =
-    Number(analysis?.criticalAlerts || 0);
+    Number(
+      reportSource.criticalAlerts || 0
+    );
+
+  const invalidRows =
+    Number(
+      reportSource.invalidRows || 0
+    );
 
   const threatTypes =
-    analysis?.threatTypes || {};
+    reportSource.threatTypes || {};
 
 
   // =====================================================
@@ -121,8 +230,8 @@ function Reports({ analysis }) {
   // =====================================================
   // SEVERITY CALCULATION
   //
-  // These are application-level severity categories.
-  // Detection counts themselves come from the model.
+  // Application-level severity categories.
+  // Detection counts come from the ML analysis.
   // =====================================================
 
   const criticalCount =
@@ -136,6 +245,52 @@ function Reports({ analysis }) {
 
   const mediumCount =
     getCount("PortScan");
+
+
+  // =====================================================
+  // FORMAT DATE
+  // =====================================================
+
+  const formatDate = (date) => {
+
+    if (!date) {
+      return "-";
+    }
+
+    return new Date(date).toLocaleString(
+      "en-IN",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }
+    );
+
+  };
+
+
+  // =====================================================
+  // VIEW SAVED ANALYSIS
+  // =====================================================
+
+  const handleViewAnalysis = (item) => {
+
+    setSelectedAnalysis(item);
+
+  };
+
+
+  // =====================================================
+  // CLEAR SELECTED ANALYSIS
+  // =====================================================
+
+  const handleShowCurrentAnalysis = () => {
+
+    setSelectedAnalysis(null);
+
+  };
 
 
   // =====================================================
@@ -270,7 +425,7 @@ function Reports({ analysis }) {
     doc.setFontSize(8);
 
     doc.text(
-      "Generated from the latest analyzed network dataset",
+      "Generated from the analyzed network dataset",
       pageWidth - 15,
       23,
       {
@@ -309,6 +464,15 @@ function Reports({ analysis }) {
     );
 
 
+    // DATASET NAME
+
+    doc.text(
+      `Dataset: ${reportSource.datasetName || "Current Analysis"}`,
+      15,
+      54
+    );
+
+
     // =================================================
     // EXECUTIVE SUMMARY
     // =================================================
@@ -329,7 +493,7 @@ function Reports({ analysis }) {
     doc.text(
       "Executive Summary",
       15,
-      62
+      66
     );
 
 
@@ -370,7 +534,7 @@ function Reports({ analysis }) {
     const cardHeight = 24;
     const cardGap = 5;
     const startX = 15;
-    const startY = 68;
+    const startY = 72;
 
 
     cards.forEach(
@@ -467,13 +631,13 @@ function Reports({ analysis }) {
     doc.text(
       "Traffic Analysis",
       15,
-      106
+      110
     );
 
 
     autoTable(doc, {
 
-      startY: 111,
+      startY: 115,
 
       head: [
         [
@@ -635,8 +799,6 @@ function Reports({ analysis }) {
       doc.lastAutoTable.finalY + 12;
 
 
-    // If not enough room, create page
-
     if (
       severityY >
       pageHeight - 70
@@ -788,7 +950,9 @@ function Reports({ analysis }) {
 
       "Analysis Type: Network Traffic Threat Detection",
 
-      "Threat counts are derived from the latest model analysis.",
+      `Invalid Rows: ${invalidRows.toLocaleString()}`,
+
+      "Threat counts are derived from the model analysis.",
 
       "Severity categories are application-level classifications.",
 
@@ -920,6 +1084,41 @@ function Reports({ analysis }) {
         </button>
 
       </div>
+
+
+      {/* =================================================
+          SELECTED ANALYSIS INFORMATION
+          ================================================= */}
+
+      {selectedAnalysis && (
+
+        <div className="selected-analysis-bar">
+
+          <div>
+
+            <strong>
+              Viewing Saved Analysis
+            </strong>
+
+            <span>
+              {selectedAnalysis.datasetName}
+            </span>
+
+          </div>
+
+
+          <button
+            className="show-current-button"
+            onClick={
+              handleShowCurrentAnalysis
+            }
+          >
+            Show Current Analysis
+          </button>
+
+        </div>
+
+      )}
 
 
       {/* =================================================
@@ -1219,6 +1418,141 @@ function Reports({ analysis }) {
 
 
       {/* =================================================
+          MONGODB ANALYSIS HISTORY
+          ================================================= */}
+
+      <div className="reports-section">
+
+        <div className="reports-section-header">
+
+          <div>
+
+            <h2>
+              Analysis History
+            </h2>
+
+            <p>
+              Previously completed analyses
+              stored in MongoDB.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        {loadingHistory ? (
+
+          <div className="history-message">
+
+            Loading analysis history...
+
+          </div>
+
+        ) : history.length === 0 ? (
+
+          <div className="history-message">
+
+            No saved analysis records found.
+
+          </div>
+
+        ) : (
+
+          <div className="report-table history-table">
+
+            <div className="report-table-header history-header">
+
+              <span>
+                Dataset
+              </span>
+
+              <span>
+                Date
+              </span>
+
+              <span>
+                Traffic
+              </span>
+
+              <span>
+                Threats
+              </span>
+
+              <span>
+                Action
+              </span>
+
+            </div>
+
+
+            {history.map(
+              (item) => (
+
+                <div
+                  className="report-table-row history-row"
+                  key={item.id}
+                >
+
+                  <span
+                    className="report-threat-name"
+                    title={
+                      item.datasetName
+                    }
+                  >
+                    {item.datasetName}
+                  </span>
+
+
+                  <span>
+                    {formatDate(
+                      item.uploadedAt
+                    )}
+                  </span>
+
+
+                  <span>
+                    {Number(
+                      item.totalTraffic || 0
+                    ).toLocaleString()}
+                  </span>
+
+
+                  <span>
+                    {Number(
+                      item.totalThreats || 0
+                    ).toLocaleString()}
+                  </span>
+
+
+                  <span>
+
+                    <button
+                      className="view-analysis-button"
+                      onClick={() =>
+                        handleViewAnalysis(
+                          item
+                        )
+                      }
+                    >
+                      View
+                    </button>
+
+                  </span>
+
+                </div>
+
+              )
+            )}
+
+          </div>
+
+        )}
+
+      </div>
+
+
+      {/* =================================================
           REPORT INFORMATION
           ================================================= */}
 
@@ -1235,11 +1569,11 @@ function Reports({ analysis }) {
           </strong>
 
           <p>
-            This report uses the latest
-            Random Forest analysis results.
-            Detection counts are taken directly
-            from the analyzed dataset. Severity
-            levels are application-level
+            This report uses the selected
+            analysis results. Detection counts
+            are taken directly from the analyzed
+            dataset and saved analysis records.
+            Severity levels are application-level
             classifications used for dashboard
             reporting.
           </p>

@@ -1,229 +1,429 @@
+import { useEffect, useState } from "react";
 import "./Incidents.css";
 
-function Incidents({ analysis }) {
+function Incidents() {
+  const [incidents, setIncidents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const threatTypes = analysis?.threatTypes || {};
+  useEffect(() => {
+    loadIncidents();
+  }, []);
 
-  const incidents = [
-    {
-      id: "INC-001",
-      type: "DDoS Attack",
-      count: threatTypes.DDoS ?? 0,
-      severity: "Critical",
-      status: (threatTypes.DDoS ?? 0) > 0 ? "Open" : "No Activity",
-    },
-    {
-      id: "INC-002",
-      type: "DoS Attack",
-      count: threatTypes.DoS ?? 0,
-      severity: "High",
-      status: (threatTypes.DoS ?? 0) > 0 ? "Open" : "No Activity",
-    },
-    {
-      id: "INC-003",
-      type: "Port Scan",
-      count: threatTypes.PortScan ?? 0,
-      severity: "Medium",
-      status: (threatTypes.PortScan ?? 0) > 0 ? "Open" : "No Activity",
-    },
-    {
-      id: "INC-004",
-      type: "Brute Force",
-      count: threatTypes.BruteForce ?? 0,
-      severity: "High",
-      status: (threatTypes.BruteForce ?? 0) > 0 ? "Open" : "No Activity",
-    },
-    {
-      id: "INC-005",
-      type: "Bot Activity",
-      count: threatTypes.Bot ?? 0,
-      severity: "High",
-      status: (threatTypes.Bot ?? 0) > 0 ? "Open" : "No Activity",
-    },
-    {
-      id: "INC-006",
-      type: "Web Attack",
-      count: threatTypes.WebAttack ?? 0,
-      severity: "Critical",
-      status: (threatTypes.WebAttack ?? 0) > 0 ? "Open" : "No Activity",
-    },
-  ];
+  // ============================================================
+  // LOAD INCIDENTS FOR LATEST ANALYSIS
+  // ============================================================
 
-  const activeIncidents =
-    incidents.filter((incident) => incident.count > 0).length;
+  const loadIncidents = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-  const criticalIncidents =
-    incidents.filter(
-      (incident) =>
-        incident.severity === "Critical" &&
-        incident.count > 0
-    ).length;
+      // --------------------------------------------------------
+      // STEP 1: Get analysis history from MongoDB
+      // --------------------------------------------------------
 
-  const highIncidents =
-    incidents.filter(
-      (incident) =>
-        incident.severity === "High" &&
-        incident.count > 0
-    ).length;
+      const historyResponse = await fetch(
+        "http://localhost:8080/api/analysis/history"
+      );
 
-  const mediumIncidents =
-    incidents.filter(
-      (incident) =>
-        incident.severity === "Medium" &&
-        incident.count > 0
-    ).length;
+      if (!historyResponse.ok) {
+        throw new Error("Failed to fetch analysis history");
+      }
 
+      const history = await historyResponse.json();
+
+      // No analysis available
+      if (!history || history.length === 0) {
+        setIncidents([]);
+        return;
+      }
+
+      // Backend returns newest analysis first
+      const latestAnalysis = history[0];
+
+      // --------------------------------------------------------
+      // STEP 2: Get incidents belonging ONLY to latest analysis
+      // --------------------------------------------------------
+
+      const incidentsResponse = await fetch(
+        `http://localhost:8080/api/incidents/analysis/${latestAnalysis.id}`
+      );
+
+      if (!incidentsResponse.ok) {
+        throw new Error("Failed to fetch incidents");
+      }
+
+      const data = await incidentsResponse.json();
+
+      // Store MongoDB incidents
+      setIncidents(Array.isArray(data) ? data : []);
+
+    } catch (err) {
+      console.error("Incident loading error:", err);
+
+      setError(
+        "Unable to load incidents from the backend."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ============================================================
+  // SUMMARY COUNTS
+  // ============================================================
+
+  const activeIncidents = incidents.filter(
+    (incident) => incident.status === "Open"
+  ).length;
+
+  const criticalIncidents = incidents.filter(
+    (incident) =>
+      incident.severity === "Critical" &&
+      incident.status === "Open"
+  ).length;
+
+  const highIncidents = incidents.filter(
+    (incident) =>
+      incident.severity === "High" &&
+      incident.status === "Open"
+  ).length;
+
+  const mediumIncidents = incidents.filter(
+    (incident) =>
+      incident.severity === "Medium" &&
+      incident.status === "Open"
+  ).length;
+
+  // ============================================================
+  // DISPLAY
+  // ============================================================
 
   return (
     <div className="incidents-page">
 
-      {/* PAGE HEADER */}
+      {/* ======================================================
+          HEADER
+      ====================================================== */}
 
       <div className="incidents-header">
-
         <div>
           <h1>Security Incidents</h1>
 
           <p>
-            Incidents identified from the latest network traffic analysis.
+            Incidents identified from the latest network traffic
+            analysis.
           </p>
         </div>
-
       </div>
 
 
-      {/* SUMMARY CARDS */}
+      {/* ======================================================
+          LOADING
+      ====================================================== */}
 
-      <div className="incident-summary">
+      {loading && (
+        <div className="incident-info">
 
-        <div className="incident-card">
-          <span>Active Incidents</span>
-          <strong>{activeIncidents}</strong>
-        </div>
-
-        <div className="incident-card critical-card">
-          <span>Critical</span>
-          <strong>{criticalIncidents}</strong>
-        </div>
-
-        <div className="incident-card high-card">
-          <span>High</span>
-          <strong>{highIncidents}</strong>
-        </div>
-
-        <div className="incident-card medium-card">
-          <span>Medium</span>
-          <strong>{mediumIncidents}</strong>
-        </div>
-
-      </div>
-
-
-      {/* INCIDENT TABLE */}
-
-      <div className="incidents-section">
-
-        <div className="section-heading">
+          <div className="info-icon">
+            ...
+          </div>
 
           <div>
-            <h2>Detected Incidents</h2>
+            <strong>Loading Incidents</strong>
 
             <p>
-              Based on actual Random Forest predictions.
+              Retrieving detected incidents from MongoDB.
             </p>
           </div>
 
-          <span className="incident-count">
-            {activeIncidents} Active
-          </span>
+        </div>
+      )}
+
+
+      {/* ======================================================
+          ERROR
+      ====================================================== */}
+
+      {!loading && error && (
+        <div className="incident-info">
+
+          <div className="info-icon">
+            !
+          </div>
+
+          <div>
+            <strong>Unable to Load Incidents</strong>
+
+            <p>
+              {error}
+            </p>
+          </div>
 
         </div>
+      )}
 
 
-        <div className="incident-table">
+      {/* ======================================================
+          MAIN CONTENT
+      ====================================================== */}
 
-          <div className="incident-table-header">
+      {!loading && !error && (
+        <>
 
-            <span>Incident ID</span>
-            <span>Attack Type</span>
-            <span>Severity</span>
-            <span>Detected</span>
-            <span>Status</span>
+          {/* ==================================================
+              SUMMARY CARDS
+          ================================================== */}
+
+          <div className="incident-summary">
+
+            <div className="incident-card">
+
+              <span>
+                Active Incidents
+              </span>
+
+              <strong>
+                {activeIncidents}
+              </strong>
+
+            </div>
+
+
+            <div className="incident-card critical-card">
+
+              <span>
+                Critical
+              </span>
+
+              <strong>
+                {criticalIncidents}
+              </strong>
+
+            </div>
+
+
+            <div className="incident-card high-card">
+
+              <span>
+                High
+              </span>
+
+              <strong>
+                {highIncidents}
+              </strong>
+
+            </div>
+
+
+            <div className="incident-card medium-card">
+
+              <span>
+                Medium
+              </span>
+
+              <strong>
+                {mediumIncidents}
+              </strong>
+
+            </div>
 
           </div>
 
 
-          {incidents.map((incident) => (
+          {/* ==================================================
+              INCIDENT TABLE
+          ================================================== */}
 
-            <div
-              className="incident-table-row"
-              key={incident.id}
-            >
+          <div className="incidents-section">
 
-              <span className="incident-id">
-                {incident.id}
-              </span>
+            <div className="section-heading">
 
-              <span className="attack-type">
-                {incident.type}
-              </span>
+              <div>
 
-              <span>
+                <h2>
+                  Detected Incidents
+                </h2>
 
-                <span
-                  className={`incident-severity ${incident.severity.toLowerCase()}`}
-                >
-                  {incident.severity}
-                </span>
+                <p>
+                  Persisted security incidents from the latest
+                  analysis.
+                </p>
 
-              </span>
+              </div>
 
-              <span className="detected-count">
-                {incident.count.toLocaleString()}
-              </span>
-
-              <span>
-
-                <span
-                  className={`incident-status ${
-                    incident.status === "Open"
-                      ? "open"
-                      : "inactive"
-                  }`}
-                >
-                  {incident.status}
-                </span>
-
+              <span className="incident-count">
+                {activeIncidents} Active
               </span>
 
             </div>
 
-          ))}
 
-        </div>
+            {/* NO INCIDENTS */}
 
-      </div>
+            {incidents.length === 0 ? (
+
+              <div className="incident-info">
+
+                <div className="info-icon">
+                  i
+                </div>
+
+                <div>
+
+                  <strong>
+                    No Incidents Available
+                  </strong>
+
+                  <p>
+                    No persisted incident records were found
+                    for the latest analysis.
+                  </p>
+
+                </div>
+
+              </div>
+
+            ) : (
+
+              /* ==================================================
+                 INCIDENT TABLE
+                 ================================================== */
+
+              <div className="incident-table">
+
+                <div className="incident-table-header">
+
+                  <span>
+                    Incident ID
+                  </span>
+
+                  <span>
+                    Attack Type
+                  </span>
+
+                  <span>
+                    Severity
+                  </span>
+
+                  <span>
+                    Detected
+                  </span>
+
+                  <span>
+                    Status
+                  </span>
+
+                </div>
 
 
-      {/* INFORMATION */}
+                {incidents.map((incident, index) => (
 
-      <div className="incident-info">
+                  <div
+                    className="incident-table-row"
+                    key={incident.id}
+                  >
 
-        <div className="info-icon">
-          !
-        </div>
+                    {/* Incident ID */}
 
-        <div>
-          <strong>Incident Detection</strong>
+                    <span className="incident-id">
+                      INC-
+                      {String(index + 1).padStart(3, "0")}
+                    </span>
 
-          <p>
-            Incident counts are derived directly from the latest
-            Random Forest prediction results. No random or
-            hardcoded detection counts are used.
-          </p>
-        </div>
 
-      </div>
+                    {/* Attack Type */}
+
+                    <span className="attack-type">
+                      {incident.threatType}
+                    </span>
+
+
+                    {/* Severity */}
+
+                    <span>
+
+                      <span
+                        className={`incident-severity ${
+                          incident.severity
+                            ? incident.severity.toLowerCase()
+                            : ""
+                        }`}
+                      >
+                        {incident.severity}
+                      </span>
+
+                    </span>
+
+
+                    {/* Detected Count */}
+
+                    <span className="detected-count">
+
+                      {Number(
+                        incident.detectedCount || 0
+                      ).toLocaleString()}
+
+                    </span>
+
+
+                    {/* Status */}
+
+                    <span>
+
+                      <span
+                        className={`incident-status ${
+                          incident.status === "Open"
+                            ? "open"
+                            : "inactive"
+                        }`}
+                      >
+                        {incident.status}
+                      </span>
+
+                    </span>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            )}
+
+          </div>
+
+
+          {/* ==================================================
+              INFORMATION
+          ================================================== */}
+
+          <div className="incident-info">
+
+            <div className="info-icon">
+              !
+            </div>
+
+            <div>
+
+              <strong>
+                Incident Detection
+              </strong>
+
+              <p>
+                Incident records are persisted in MongoDB and
+                are generated from the Random Forest prediction
+                results for the latest uploaded dataset.
+                No random detection counts are used.
+              </p>
+
+            </div>
+
+          </div>
+
+        </>
+      )}
 
     </div>
   );

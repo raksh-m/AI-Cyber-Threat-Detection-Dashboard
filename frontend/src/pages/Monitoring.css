@@ -1,70 +1,504 @@
 .monitoring-page {
-  padding: 30px;
-  color: white;
+  padding: 26px;
+  min-height: calc(100vh - 70px);
+  background: #071321;
+  color: #ffffff;
 }
 
-.monitoring-page h1 {
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.monitoring-header {
+  margin-bottom: 24px;
+}
+
+.monitoring-header h1 {
+  margin: 0 0 8px;
   font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.monitoring-header p {
+  margin: 0;
+  color: #9fc4e8;
+  font-size: 14px;
+}
+
+
+/* ============================================================
+   MAIN CARD
+============================================================ */
+
+.monitoring-card {
+  background: #102235;
+  border: 1px solid #234563;
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 22px;
+  box-sizing: border-box;
+}
+
+.monitoring-card-header {
+  margin-bottom: 22px;
+}
+
+.monitoring-card-header h2 {
+  margin: 0 0 7px;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.monitoring-card-header p {
+  margin: 0;
+  color: #8fb7dd;
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   UPLOAD AREA
+============================================================ */
+
+.monitoring-upload-area {
+  border: 1px dashed #34709f;
+  border-radius: 10px;
+  background: #0b1b2d;
+  padding: 42px 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.upload-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #123653;
+  color: #00d9ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.monitoring-upload-area h3 {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.monitoring-upload-area p {
+  margin: 0 0 20px;
+  color: #8fb7dd;
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   CHOOSE FILE BUTTON
+============================================================ */
+
+.choose-file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #00c8f5;
+  color: #06121e;
+  padding: 11px 22px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.choose-file-button:hover {
+  background: #18d5ff;
+  transform: translateY(-1px);
+}
+
+.choose-file-button input {
+  display: none;
+}
+
+
+/* ============================================================
+   SELECTED DATASET
+============================================================ */
+
+.selected-dataset {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #0b1b2d;
+  border: 1px solid #234563;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 18px;
+}
+
+.dataset-file-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 7px;
+  background: #123c59;
+  color: #00d9ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dataset-file-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dataset-file-info strong {
+  color: #ffffff;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dataset-file-info span {
+  color: #8fb7dd;
+  font-size: 12px;
+}
+
+.remove-file-button {
+  background: transparent;
+  border: 1px solid #75404a;
+  color: #ff7070;
+  border-radius: 6px;
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.remove-file-button:hover {
+  background: #341c25;
+}
+
+
+/* ============================================================
+   ANALYZE BUTTON
+============================================================ */
+
+.analyze-dataset-button {
+  width: 100%;
+  border: none;
+  border-radius: 7px;
+  padding: 13px 18px;
+  background: #00c8f5;
+  color: #06121e;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  transition: 0.2s ease;
+}
+
+.analyze-dataset-button:hover:not(:disabled) {
+  background: #19d5ff;
+}
+
+.analyze-dataset-button:disabled {
+  background: #25445d;
+  color: #7593ad;
+  cursor: not-allowed;
+}
+
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+.loading-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #12344a;
+  border-top-color: #06121e;
+  border-radius: 50%;
+  animation: monitoring-spin 0.8s linear infinite;
+}
+
+@keyframes monitoring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ============================================================
+   SUCCESS / ERROR
+============================================================ */
+
+.monitoring-success,
+.monitoring-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 8px;
+}
+
+.monitoring-success {
+  background: #0c3029;
+  border: 1px solid #1e6e5b;
+}
+
+.monitoring-error {
+  background: #351d24;
+  border: 1px solid #783d49;
+}
+
+.message-icon {
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.monitoring-success .message-icon {
+  background: #22c985;
+  color: #071321;
+}
+
+.monitoring-error .message-icon {
+  background: #ff4b4b;
+  color: #ffffff;
+}
+
+.monitoring-success strong,
+.monitoring-error strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.monitoring-success p,
+.monitoring-error p {
+  margin: 0;
+  color: #b6d3ec;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   RESULT SUMMARY
+============================================================ */
+
+.monitoring-result-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 25px;
+}
+
+.result-card {
+  background: #0b1b2d;
+  border: 1px solid #234563;
+  border-radius: 8px;
+  padding: 17px;
+}
+
+.result-card span {
+  display: block;
+  color: #8fb7dd;
+  font-size: 12px;
   margin-bottom: 8px;
 }
 
-.monitoring-subtitle {
-  color: #8eb5d9;
-  margin-bottom: 30px;
+.result-card strong {
+  color: #ffffff;
+  font-size: 25px;
 }
 
-.upload-container {
-  background: #10253a;
-  border: 1px solid #244966;
-  border-radius: 12px;
-  padding: 30px;
-  max-width: 750px;
+.result-card.threat-result {
+  border-color: #75404a;
 }
 
-.upload-container h2 {
-  margin-bottom: 10px;
+.result-card.critical-result {
+  border-color: #795f31;
 }
 
-.upload-container p {
-  color: #8eb5d9;
-  margin-bottom: 25px;
+
+/* ============================================================
+   DETECTED TYPES
+============================================================ */
+
+.detected-types-section {
+  margin-top: 10px;
 }
 
-.upload-area {
-  background: #091a2b;
-  border: 2px dashed #2c5878;
-  border-radius: 10px;
-
-  padding: 40px;
-  margin-bottom: 25px;
-
-  text-align: center;
+.detected-types-section h3 {
+  margin: 0 0 14px;
+  color: #ffffff;
+  font-size: 16px;
 }
 
-.upload-area input {
-  color: white;
+.detected-types-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }
 
-.selected-file {
-  margin-top: 20px;
-  color: #34c759;
+.detected-type-card {
+  background: #0b1b2d;
+  border: 1px solid #234563;
+  border-radius: 8px;
+  padding: 15px;
 }
 
-.analyze-button {
-  background: #0a84ff;
-  color: white;
-
-  border: none;
-  border-radius: 7px;
-
-  padding: 12px 25px;
-
-  font-size: 15px;
+.detected-type-card span {
+  display: block;
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 600;
-
-  cursor: pointer;
+  margin-bottom: 8px;
 }
 
-.analyze-button:hover {
-  background: #0071e3;
+.detected-type-card strong {
+  display: block;
+  color: #00d9ff;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.detected-type-card small {
+  color: #7598b8;
+  font-size: 11px;
+}
+
+
+/* ============================================================
+   NO THREATS
+============================================================ */
+
+.no-threats {
+  background: #0b1b2d;
+  border: 1px solid #234563;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.no-threats strong {
+  color: #ffffff;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.no-threats p {
+  margin: 0;
+  color: #8fb7dd;
+  font-size: 12px;
+}
+
+
+/* ============================================================
+   CURRENT ANALYSIS NOTICE
+============================================================ */
+
+.current-analysis-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 15px;
+  border-radius: 8px;
+  background: #0c293b;
+  border: 1px solid #225977;
+}
+
+.notice-icon {
+  width: 27px;
+  height: 27px;
+  min-width: 27px;
+  border-radius: 50%;
+  background: #00c8f5;
+  color: #06121e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.current-analysis-notice strong {
+  display: block;
+  color: #ffffff;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.current-analysis-notice p {
+  margin: 0;
+  color: #9fc4e8;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 1000px) {
+
+  .monitoring-result-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detected-types-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .monitoring-page {
+    padding: 16px;
+  }
+
+  .monitoring-result-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .detected-types-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-dataset {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .dataset-file-info {
+    width: calc(100% - 65px);
+  }
+
+  .remove-file-button {
+    margin-left: 62px;
+  }
+
 }
