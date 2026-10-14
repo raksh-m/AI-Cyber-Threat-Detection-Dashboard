@@ -13,7 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "https://ai-cyber-threat-detection-dashboard-1.onrender.com"
+})
 public class ThreatController {
 
     private final ThreatAnalysisService threatAnalysisService;
