@@ -70,7 +70,7 @@ function Dashboard() {
   useEffect(() => {
 
     fetch(
-      "http://localhost:8080/api/analysis"
+      "https://ai-cyber-threat-detection-dashboard.onrender.com/api/analysis"
     )
 
       .then((response) => {

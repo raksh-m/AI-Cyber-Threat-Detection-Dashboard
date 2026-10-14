@@ -27,7 +27,7 @@ function Reports({ analysis }) {
       setLoadingHistory(true);
 
       const response = await fetch(
-        "http://localhost:8080/api/analysis/history"
+        "https://ai-cyber-threat-detection-dashboard.onrender.com/api/analysis/history"
       );
 
       if (!response.ok) {

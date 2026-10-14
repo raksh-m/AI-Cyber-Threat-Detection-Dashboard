@@ -24,7 +24,7 @@ function Incidents() {
       // --------------------------------------------------------
 
       const historyResponse = await fetch(
-        "http://localhost:8080/api/analysis/history"
+        "https://ai-cyber-threat-detection-dashboard.onrender.com/api/analysis/history"
       );
 
       if (!historyResponse.ok) {
@@ -47,7 +47,7 @@ function Incidents() {
       // --------------------------------------------------------
 
       const incidentsResponse = await fetch(
-        `http://localhost:8080/api/incidents/analysis/${latestAnalysis.id}`
+         `https://ai-cyber-threat-detection-dashboard.onrender.com/api/incidents/analysis/${latestAnalysis.id}`
       );
 
       if (!incidentsResponse.ok) {

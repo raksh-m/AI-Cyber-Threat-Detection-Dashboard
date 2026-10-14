@@ -72,7 +72,8 @@ function Monitoring({ setAnalysis, setCurrentPage }) {
       formData.append("file", selectedFile);
 
       const response = await fetch(
-        "http://localhost:8080/api/analysis/upload",
+         "https://ai-cyber-threat-detection-dashboard.onrender.com/api/analysis/upload",
+  
         {
           method: "POST",
           body: formData,
