@@ -22,7 +22,7 @@ public class ThreatPredictor {
 
     // Saved Random Forest model
     private static final Path MODEL_FILE =
-        Path.of("..", "ml", "models", "netrix-random-forest.model");
+        Path.of("ml", "models", "netrix-random-forest.model");
     // For now we test using test.csv
     private static final Path INPUT_FILE =
             Path.of("data", "processed", "test.csv");
